@@ -56,3 +56,22 @@ func Test_MergeSortedLinkedLists(t *testing.T) {
 	expected = listToNums(makeLinkedList(nil))
 	assert.Equal(t, expected, actual)
 }
+
+func Test_RemoveDuplicates(t *testing.T) {
+	input := []int{1, 1, 2}
+	actual := RemoveDuplicates(input)
+	assert.Equal(t, 2, actual)
+	assert.Equal(t, []int{1, 2}, input[:actual])
+
+	input = []int{0, 0, 1, 1, 1, 2, 2, 3, 3, 4}
+	actual = RemoveDuplicates(input)
+	assert.Equal(t, 5, actual)
+	assert.Equal(t, []int{0, 1, 2, 3, 4}, input[:actual])
+}
+
+func Test_BubbleSort(t *testing.T) {
+	input := []int{1, 4, 2}
+	BubbleSort(input)
+	expected := []int{1, 2, 4}
+	assert.Equal(t, expected, input)
+}

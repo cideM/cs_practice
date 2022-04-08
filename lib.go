@@ -1,6 +1,8 @@
 package main
 
-import "math"
+import (
+	"math"
+)
 
 // LongestCommonPrefix uses vertical scanning, so it looks at one column of
 // letters at a time.
@@ -72,4 +74,39 @@ func MergeSortedLinkedLists(list1 *ListNode, list2 *ListNode) *ListNode {
 		cur2 = cur2.Next
 
 	}
+}
+
+// https://en.wikipedia.org/wiki/Sorting_algorithm
+
+// BubbleSort is simple but slow. It goes over the list repeatedly until
+// everything is sorted. It's stable and has O(n) memory.
+func BubbleSort(xs []int) {
+	swapped := true
+	for swapped {
+		swapped = false
+		for i := 1; i < len(xs); i++ {
+			if xs[i-1] > xs[i] {
+				swapped = true
+				xs[i-1], xs[i] = xs[i], xs[i-1]
+			}
+		}
+	}
+}
+
+// RemoveDuplicates only works on sorted slices and returns the number of
+// elements of the input slice that are sorted. It's O(n) where n is the length
+// of the slice.
+func RemoveDuplicates(nums []int) int {
+	l := len(nums)
+	if l < 2 {
+		return l
+	}
+	pos := 0
+	for i := 1; i < l; i++ {
+		if nums[pos] != nums[i] {
+			pos++
+			nums[pos] = nums[i]
+		}
+	}
+	return pos + 1
 }
