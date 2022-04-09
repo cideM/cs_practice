@@ -1,6 +1,7 @@
-package main
+package slice
 
 import (
+	"golang.org/x/exp/constraints"
 	"math"
 )
 
@@ -33,54 +34,20 @@ func LongestCommonPrefix(strs []string) string {
 	return strs[0][:offset]
 }
 
-type ListNode struct {
-	Val  int
-	Next *ListNode
-}
-
-// MergeSortedLinkedLists looks at the current node of both lists and adds
-// the smaller one to the new list. It then advances the list from which it
-// took the node. Therefore, both lists are advanced separately, and
-// traversed at max once. If the end of one list is reached, we can just
-// append the remainder of the other list. The reason this all works is
-// because both input lists are already sorted. This is O(n + m) with n and m being the lengths of the lists.
-func MergeSortedLinkedLists(list1 *ListNode, list2 *ListNode) *ListNode {
-	cur1, cur2 := list1, list2
-	root := &ListNode{}
-	head := root
-
-	for {
-		if cur1 == nil {
-			root.Next = cur2
-			return head.Next
-		}
-
-		if cur2 == nil {
-			root.Next = cur1
-			return head.Next
-		}
-
-		if cur1.Val < cur2.Val {
-			p := cur1
-			root.Next = p
-			root = p
-			cur1 = cur1.Next
-			continue
-		}
-
-		p := cur2
-		root.Next = p
-		root = p
-		cur2 = cur2.Next
-
-	}
+// https://go.dev/ref/spec#General_interfaces
+// > Implementation restriction: A union (with more than one term) cannot
+// > contain the predeclared identifier comparable or interfaces that specify
+// > methods, or embed comparable or interfaces that specify methods. 
+type orderedComparable interface {
+  constraints.Ordered
+  comparable
 }
 
 // https://en.wikipedia.org/wiki/Sorting_algorithm
 
 // BubbleSort is simple but slow. It goes over the list repeatedly until
 // everything is sorted. It's stable and has O(n) memory.
-func BubbleSort(xs []int) {
+func BubbleSort[T orderedComparable](xs []T) {
 	swapped := true
 	for swapped {
 		swapped = false
@@ -93,19 +60,20 @@ func BubbleSort(xs []int) {
 	}
 }
 
+
 // RemoveDuplicates only works on sorted slices and returns the number of
 // elements of the input slice that are sorted. It's O(n) where n is the length
 // of the slice.
-func RemoveDuplicates(nums []int) int {
-	l := len(nums)
+func RemoveDuplicates[T orderedComparable](xs []T) int {
+	l := len(xs)
 	if l < 2 {
 		return l
 	}
 	pos := 0
 	for i := 1; i < l; i++ {
-		if nums[pos] != nums[i] {
+		if xs[pos] != xs[i] {
 			pos++
-			nums[pos] = nums[i]
+			xs[pos] = xs[i]
 		}
 	}
 	return pos + 1

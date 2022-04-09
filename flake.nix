@@ -21,7 +21,7 @@
             moreutils
             jq
 
-            go
+            go_1_18
             gopls
             gotools
             graphviz
