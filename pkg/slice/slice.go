@@ -78,3 +78,21 @@ func RemoveDuplicates[T orderedComparable](xs []T) int {
 	}
 	return pos + 1
 }
+
+// MaxSubArray uses Kadane's algorithm and expects an input list of at least
+// length 1
+func MaxSubArray(nums []int) int {
+    cur, best := 0, math.MinInt32
+    for i := 0; i < len(nums); i++ {
+        sum := cur + nums[i]
+        if sum > nums[i] {
+            cur = sum
+        } else {
+            cur = nums[i]
+        }
+        if cur > best {
+            best = cur
+        }
+    }
+    return best
+}
