@@ -3,6 +3,7 @@ package slice
 import (
 	"golang.org/x/exp/constraints"
 	"math"
+	// "log"
 )
 
 // LongestCommonPrefix uses vertical scanning, so it looks at one column of
@@ -37,10 +38,10 @@ func LongestCommonPrefix(strs []string) string {
 // https://go.dev/ref/spec#General_interfaces
 // > Implementation restriction: A union (with more than one term) cannot
 // > contain the predeclared identifier comparable or interfaces that specify
-// > methods, or embed comparable or interfaces that specify methods. 
+// > methods, or embed comparable or interfaces that specify methods.
 type orderedComparable interface {
-  constraints.Ordered
-  comparable
+	constraints.Ordered
+	comparable
 }
 
 // https://en.wikipedia.org/wiki/Sorting_algorithm
@@ -59,7 +60,6 @@ func BubbleSort[T orderedComparable](xs []T) {
 		}
 	}
 }
-
 
 // RemoveDuplicates only works on sorted slices and returns the number of
 // elements of the input slice that are sorted. It's O(n) where n is the length
@@ -82,17 +82,101 @@ func RemoveDuplicates[T orderedComparable](xs []T) int {
 // MaxSubArray uses Kadane's algorithm and expects an input list of at least
 // length 1
 func MaxSubArray(nums []int) int {
-    cur, best := 0, math.MinInt32
-    for i := 0; i < len(nums); i++ {
-        sum := cur + nums[i]
-        if sum > nums[i] {
-            cur = sum
-        } else {
-            cur = nums[i]
-        }
-        if cur > best {
-            best = cur
-        }
-    }
-    return best
+	cur, best := 0, math.MinInt32
+	for i := 0; i < len(nums); i++ {
+		sum := cur + nums[i]
+		if sum > nums[i] {
+			cur = sum
+		} else {
+			cur = nums[i]
+		}
+		if cur > best {
+			best = cur
+		}
+	}
+	return best
+}
+
+// PlusOne treats a slice of digits like a number and increments it by one.
+// Numbers must be greater than or equal to zero.
+func PlusOne(digits []int) []int {
+	l := len(digits)
+
+	carry := true
+	for i := l - 1; i >= 0; i-- {
+		if !carry {
+			return digits
+		}
+
+		cur := digits[i]
+
+		if i == 0 {
+			if cur == 9 {
+				newInts := []int{1, 0}
+				newInts = append(newInts, digits[1:]...)
+				return newInts
+			}
+
+			digits[i]++
+			return digits
+		}
+
+		if cur == 9 {
+			digits[i] = 0
+			continue
+		}
+
+		digits[i]++
+		carry = false
+	}
+
+	return digits
+}
+
+// MergeSorted merges nums2 into nums1 while maintaining the sorting. nums1
+// will have enough space and the length of the actual array num1 is denoted by
+// m. Both nums1 nums2 are sorted.
+func MergeSorted(nums1 []int, m int, nums2 []int, n int) {
+	// This is the second attempt after reading some discussions online. It's
+	// much better to start at the end of both slices and then also start
+	// **writing to the end of nums1**. This last part is the key insight,
+	// because then you don't need any swapping.
+	// Think about it: with the way the question is phrased we know that we will
+	// fill nums1 eventually. So whichever last element from nums1 and nums2 is
+	// greater, it will end up in the last position of nums1.
+	write := m + n - 1
+	m--
+	n--
+	for n >= 0 {
+		if m >= 0 && nums1[m] > nums2[n] {
+			nums1[write] = nums1[m]
+			m--
+		} else {
+			nums1[write] = nums2[n]
+			n--
+		}
+		write--
+	}
+}
+
+// MergeSortedFirst was my first attempt which starts at the beginning of both
+// slices. The problem is that it will do a lot of shifting and as such it'll
+// be slower than it has to.
+func MergeSortedFirst(nums1 []int, m int, nums2 []int, n int) {
+	i1, i2 := 0, 0
+	for i2 < n {
+		if i1 >= m {
+			copy(nums1[m:], nums2[i2:])
+			return
+		}
+
+		for i2 < n && nums2[i2] < nums1[i1] {
+			copy(nums1[i1+1:], nums1[i1:])
+			nums1[i1] = nums2[i2]
+			m++
+			i2++
+			continue
+		}
+		i1++
+	}
 }

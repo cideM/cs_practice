@@ -54,3 +54,60 @@ func Test_MaxSubArray(t *testing.T) {
 		})
 	}
 }
+
+func Test_PlusOne(t *testing.T) {
+	tests := []struct {
+		in       []int
+		expected []int
+	}{
+		{in: []int{1}, expected: []int{2}},
+		{in: []int{9}, expected: []int{1, 0}},
+		{in: []int{1, 9}, expected: []int{2, 0}},
+		{in: []int{1, 9, 9}, expected: []int{2, 0, 0}},
+	}
+
+	for _, test := range tests {
+		name := fmt.Sprintf("%d, %d", test.in, test.expected)
+		t.Run(name, func(t *testing.T) {
+			actual := PlusOne(test.in)
+			assert.Equal(t, test.expected, actual)
+		})
+	}
+}
+
+func Test_MergeSorged(t *testing.T) {
+	tests := []struct {
+		nums1, nums2, expected []int
+		m, n                   int
+	}{
+		{
+			nums1:    []int{1,2,3,0,0,0},
+			nums2:    []int{2,5,6},
+			m:        3,
+			n:        3,
+			expected: []int{1,2,2,3,5,6},
+		},
+		{
+			nums1:    []int{1},
+			nums2:    []int{},
+			m:        1,
+			n:        0,
+			expected: []int{1},
+		},
+		{
+			nums1:    []int{2,0},
+			nums2:    []int{1},
+			m:        1,
+			n:        1,
+			expected: []int{1,2},
+		},
+	}
+
+	for _, test := range tests {
+		name := fmt.Sprintf("%v, %d, %v, %d, %v", test.nums1, test.m, test.nums2, test.n, test.expected)
+		t.Run(name, func(t *testing.T) {
+			MergeSorted(test.nums1, test.m, test.nums2, test.n)
+			assert.Equal(t, test.expected, test.nums1)
+		})
+	}
+}
