@@ -1,12 +1,16 @@
 package tree
 
 import (
-	"testing"
 	"github.com/stretchr/testify/assert"
+	"testing"
 )
 
-func makeBinaryHelper[T any](xs []T) Binary[T] {
-	root := Binary[T]{Val: xs[0]}
+func makeBinaryHelper[T comparable](xs []*T) *Binary[T] {
+  if xs[0] == nil {
+    return nil
+  }
+
+	root := Binary[T]{Val: *xs[0]}
 	a := []*Binary[T]{&root}
 	l := len(xs)
 
@@ -17,23 +21,46 @@ func makeBinaryHelper[T any](xs []T) Binary[T] {
 		rightChildIndex := 2*i + 2
 
 		if leftChildIndex < l {
-			leftChild := Binary[T]{Val: xs[leftChildIndex]}
-			node.Left = &leftChild
-			a = append(a, &leftChild)
+			leftV := xs[leftChildIndex]
+			var leftChild *Binary[T]
+			if leftV != nil {
+				leftChild = &Binary[T]{Val: *leftV}
+			}
+			node.Left = leftChild
+			a = append(a, leftChild)
 		}
 
 		if rightChildIndex < l {
-			rightChild := Binary[T]{Val: xs[rightChildIndex]}
-			node.Right = &rightChild
-			a = append(a, &rightChild)
+			rightV := xs[rightChildIndex]
+			var rightChild *Binary[T]
+			if rightV != nil {
+				rightChild = &Binary[T]{Val: *rightV}
+			}
+			node.Right = rightChild
+			a = append(a, rightChild)
 		}
 	}
 
-	return *a[0]
+	return a[0]
 }
 
-func Test_InOrder(t *testing.T) {
-	tree := makeBinaryHelper([]int{1, 2, 3, 4, 5})
-	out := tree.InOrder()
+func intp(i int) *int {
+	return &i
+}
+
+func Test_LNR(t *testing.T) {
+	tree := makeBinaryHelper([]*int{intp(1), intp(2), intp(3), intp(4), intp(5)})
+	out := tree.LNR()
 	assert.Equal(t, []int{4, 2, 5, 1, 3}, out)
+}
+
+func Test_IsSymmetric(t *testing.T) {
+	tree := makeBinaryHelper([]*int{intp(1), intp(2), intp(2), intp(3), intp(4), intp(4), intp(3)})
+	assert.True(t, tree.IsSymmetric())
+
+	tree2 := makeBinaryHelper([]*int{intp(1), intp(2), intp(2), intp(2), nil, intp(2)})
+	assert.False(t, tree2.IsSymmetric())
+
+	tree3 := makeBinaryHelper([]*int{intp(1), intp(2), intp(2), nil, intp(3), nil, intp(3)})
+	assert.False(t, tree3.IsSymmetric())
 }
