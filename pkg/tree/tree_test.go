@@ -6,9 +6,9 @@ import (
 )
 
 func makeBinaryHelper[T comparable](xs []*T) *Binary[T] {
-  if xs[0] == nil {
-    return nil
-  }
+	if xs[0] == nil {
+		return nil
+	}
 
 	root := Binary[T]{Val: *xs[0]}
 	a := []*Binary[T]{&root}
@@ -65,9 +65,14 @@ func Test_IsSymmetric(t *testing.T) {
 	assert.False(t, tree3.IsSymmetric())
 }
 
-func Test_MaxDepth(t *testing.T) {
+func Test_Height(t *testing.T) {
 	tree := makeBinaryHelper([]*int{intp(1), intp(2), intp(3), intp(4), intp(5)})
-	out := tree.MaxDepth()
+	out := tree.Height()
 	assert.Equal(t, 3, out)
 }
 
+func Test_FromSorted(t *testing.T) {
+	tree := makeBinaryHelper([]*int{intp(0), intp(-3), intp(9), intp(-10), nil, intp(5)})
+	bst := FromSorted([]int{-10, -3, 0, 5, 9})
+	assert.Equal(t, tree.LNR(), bst.LNR())
+}

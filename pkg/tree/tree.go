@@ -69,14 +69,14 @@ func (b Binary[T]) IsSymmetric() bool {
 	return isMirror(b.Left, b.Right)
 }
 
-func (b Binary[T]) MaxDepth() int {
+func (b Binary[T]) Height() int {
 	dl, dr := 0, 0
 	if b.Left != nil {
-		dl = b.Left.MaxDepth()
+		dl = b.Left.Height()
 	}
 
 	if b.Right != nil {
-		dr = b.Right.MaxDepth()
+		dr = b.Right.Height()
 	}
 
 	if dl > dr {
@@ -84,4 +84,19 @@ func (b Binary[T]) MaxDepth() int {
 	} else {
 		return dr + 1
 	}
+}
+
+// FromSorted creates a binary search tree from a sorted list
+func FromSorted[T comparable](xs []T) *Binary[T] {
+	l := len(xs)
+	if l == 0 {
+		return nil
+	}
+	mid := l / 2
+	n := Binary[T]{
+		Val:   xs[mid],
+		Left:  FromSorted(xs[:mid]),
+		Right: FromSorted(xs[mid+1:]),
+	}
+	return &n
 }
