@@ -68,3 +68,20 @@ func isMirror[T comparable](l, r *Binary[T]) bool {
 func (b Binary[T]) IsSymmetric() bool {
 	return isMirror(b.Left, b.Right)
 }
+
+func (b Binary[T]) MaxDepth() int {
+	dl, dr := 0, 0
+	if b.Left != nil {
+		dl = b.Left.MaxDepth()
+	}
+
+	if b.Right != nil {
+		dr = b.Right.MaxDepth()
+	}
+
+	if dl > dr {
+		return dl + 1
+	} else {
+		return dr + 1
+	}
+}

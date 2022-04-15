@@ -64,3 +64,10 @@ func Test_IsSymmetric(t *testing.T) {
 	tree3 := makeBinaryHelper([]*int{intp(1), intp(2), intp(2), nil, intp(3), nil, intp(3)})
 	assert.False(t, tree3.IsSymmetric())
 }
+
+func Test_MaxDepth(t *testing.T) {
+	tree := makeBinaryHelper([]*int{intp(1), intp(2), intp(3), intp(4), intp(5)})
+	out := tree.MaxDepth()
+	assert.Equal(t, 3, out)
+}
+
