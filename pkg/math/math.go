@@ -2,6 +2,7 @@ package math
 
 import (
 	"math"
+	// "log"
 )
 
 // SquareRootBinarySearch finds the square root of "x" using binary search to
@@ -55,4 +56,28 @@ func SquareRootNewton(n int) int {
 		}
 		guess = newGuess
 	}
+}
+
+func PascalTriangle(numRows int) [][]int {
+	if numRows == 0 {
+		return [][]int{}
+	}
+
+	rows := [][]int{{1}}
+	for i := 1; i < numRows; i++ {
+		lastRow := rows[i-1]
+		currentRow := []int{}
+		for j := 0; j <= len(lastRow); j++ {
+			var a, b int
+			if j > 0 {
+				a = lastRow[j-1]
+			}
+			if j < len(lastRow) {
+				b = lastRow[j]
+			}
+			currentRow = append(currentRow, a+b)
+		}
+		rows = append(rows, currentRow)
+	}
+	return rows
 }
