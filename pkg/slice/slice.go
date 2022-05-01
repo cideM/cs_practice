@@ -180,3 +180,31 @@ func MergeSortedFirst(nums1 []int, m int, nums2 []int, n int) {
 		i1++
 	}
 }
+
+// MaxProfit returns the indeces of the numbers that would yield the largest
+// profit if you were to buy at stock at index 1 and sell it at index 2. It's a
+// slight twist on just returning the max profit. If the input array is empty
+// it returns -1, -1
+func MaxProfitIndeces(xs []int) (int, int) {
+  if len(xs) == 0 {
+    return -1, -1
+  }
+
+  bestLow, bestHigh := -1, -1
+  min := xs[0]
+  bestProfit := 0
+
+  for i, n := range xs {
+    if n < min {
+      min = n
+    }
+
+    profit := n - min
+    if profit > bestProfit {
+      bestLow, bestHigh = min, i
+      bestProfit = profit
+    }
+  }
+
+  return bestLow, bestHigh
+}

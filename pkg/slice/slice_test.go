@@ -81,11 +81,11 @@ func Test_MergeSorged(t *testing.T) {
 		m, n                   int
 	}{
 		{
-			nums1:    []int{1,2,3,0,0,0},
-			nums2:    []int{2,5,6},
+			nums1:    []int{1, 2, 3, 0, 0, 0},
+			nums2:    []int{2, 5, 6},
 			m:        3,
 			n:        3,
-			expected: []int{1,2,2,3,5,6},
+			expected: []int{1, 2, 2, 3, 5, 6},
 		},
 		{
 			nums1:    []int{1},
@@ -95,11 +95,11 @@ func Test_MergeSorged(t *testing.T) {
 			expected: []int{1},
 		},
 		{
-			nums1:    []int{2,0},
+			nums1:    []int{2, 0},
 			nums2:    []int{1},
 			m:        1,
 			n:        1,
-			expected: []int{1,2},
+			expected: []int{1, 2},
 		},
 	}
 
@@ -108,6 +108,26 @@ func Test_MergeSorged(t *testing.T) {
 		t.Run(name, func(t *testing.T) {
 			MergeSorted(test.nums1, test.m, test.nums2, test.n)
 			assert.Equal(t, test.expected, test.nums1)
+		})
+	}
+}
+
+func Test_MaxProfitIndeces(t *testing.T) {
+	tests := []struct {
+		in        []int
+		expected1 int
+		expected2 int
+	}{
+		{in: []int{}, expected1: -1, expected2: -1},
+		{in: []int{7, 1, 5, 3, 6, 4}, expected1: 1, expected2: 4},
+	}
+
+	for _, test := range tests {
+		name := fmt.Sprintf("%d, %d, %d", test.in, test.expected1, test.expected2)
+		t.Run(name, func(t *testing.T) {
+			a, b := MaxProfitIndeces(test.in)
+			assert.Equal(t, test.expected1, a)
+			assert.Equal(t, test.expected2, b)
 		})
 	}
 }
