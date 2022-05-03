@@ -47,3 +47,16 @@ func Test_MergeSorted(t *testing.T) {
 	expected = unroll(makeLinkedList[int](nil))
 	assert.Equal(t, expected, actual)
 }
+
+func Test_HasCycle(t *testing.T) {
+  root := ListNode[int]{Val: 1, Next: nil}
+  node1 := ListNode[int]{Val: 1, Next: nil}
+  node1.Next = &root
+  root.Next = &node1
+  assert.True(t, root.HasCycle())
+
+  root = ListNode[int]{Val: 1, Next: nil}
+  node1 = ListNode[int]{Val: 1, Next: nil}
+  root.Next = &node1
+  assert.False(t, root.HasCycle())
+}

@@ -47,3 +47,39 @@ func MergeSorted[T constraints.Ordered](list1 *ListNode[T], list2 *ListNode[T]) 
 
 	}
 }
+
+func (n ListNode[T]) HasCycle() bool {
+	// Brent algorithm
+	// https://en.wikipedia.org/wiki/Cycle_detection#Brent's_algorithm
+  if n.Next == nil {
+    return false
+  }
+	turtle, rabbit := n.Next, n.Next
+
+	step_limit := 2
+	steps_taken := 0
+
+	for {
+		if rabbit.Next == nil {
+			return false
+		}
+
+		// Advance the rabbit until we've reached the steps_taken limit, which we
+		// keep increasing after each sequence of steps. We increase it by a power
+		// of two. That way the rabbit runs ahead and the turtle is occasionalyl
+		// teleported to the rabbit.
+		rabbit = rabbit.Next
+
+		steps_taken++
+
+		if rabbit == turtle {
+			return true
+		}
+
+		if steps_taken == step_limit {
+			steps_taken = 0
+			step_limit *= 2
+			turtle = rabbit
+		}
+	}
+}
