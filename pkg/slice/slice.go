@@ -3,7 +3,6 @@ package slice
 import (
 	"golang.org/x/exp/constraints"
 	"math"
-	// "log"
 )
 
 // LongestCommonPrefix uses vertical scanning, so it looks at one column of
