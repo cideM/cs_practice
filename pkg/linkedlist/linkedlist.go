@@ -83,3 +83,27 @@ func (n ListNode[T]) HasCycle() bool {
 		}
 	}
 }
+
+func (n ListNode[T]) DoesIntersect(other ListNode[T]) *ListNode[T] {
+  a, b := &n, &other
+
+  for a != b {
+    if a == nil && b == nil {
+      return nil
+    }
+
+    if a == nil {
+      a = &other
+    } else {
+      a = a.Next
+    }
+
+    if b == nil {
+      b = &n
+    } else {
+      b = b.Next
+    }
+  }
+
+  return a
+}

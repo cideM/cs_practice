@@ -3,8 +3,8 @@ package linkedlist
 import (
 	"testing"
 
-	"golang.org/x/exp/constraints"
 	"github.com/stretchr/testify/assert"
+	"golang.org/x/exp/constraints"
 )
 
 func makeLinkedList[T constraints.Ordered](nums []T) *ListNode[T] {
@@ -49,14 +49,34 @@ func Test_MergeSorted(t *testing.T) {
 }
 
 func Test_HasCycle(t *testing.T) {
-  root := ListNode[int]{Val: 1, Next: nil}
-  node1 := ListNode[int]{Val: 1, Next: nil}
-  node1.Next = &root
-  root.Next = &node1
-  assert.True(t, root.HasCycle())
+	root := ListNode[int]{Val: 1, Next: nil}
+	node1 := ListNode[int]{Val: 1, Next: nil}
+	node1.Next = &root
+	root.Next = &node1
+	assert.True(t, root.HasCycle())
 
-  root = ListNode[int]{Val: 1, Next: nil}
-  node1 = ListNode[int]{Val: 1, Next: nil}
-  root.Next = &node1
-  assert.False(t, root.HasCycle())
+	root = ListNode[int]{Val: 1, Next: nil}
+	node1 = ListNode[int]{Val: 1, Next: nil}
+	root.Next = &node1
+	assert.False(t, root.HasCycle())
+}
+
+func Test_DoesIntersect(t *testing.T) {
+	t.Run("finds intersection", func(t *testing.T) {
+		listA := makeLinkedList([]int{1, 2, 4})
+		listB := makeLinkedList([]int{1, 3, 4})
+
+		listB.Next.Next.Next = listA.Next.Next
+
+		intersectNode := listA.DoesIntersect(*listB)
+		assert.Equal(t, listB.Next.Next.Next, intersectNode)
+	})
+
+	t.Run("finds nil when there's no intersection", func(t *testing.T) {
+		listA := makeLinkedList([]int{1, 2, 4})
+		listB := makeLinkedList([]int{1, 3, 4})
+
+		intersectNode := listA.DoesIntersect(*listB)
+		assert.Nil(t, intersectNode)
+	})
 }
